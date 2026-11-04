@@ -2,54 +2,60 @@
 
 <div class="page-head">
   <div>
-    <p class="eyebrow"><%= @quote.client.display_name %></p>
-    <h1><%= @quote.title %> <%= status_badge(@quote) %></h1>
+    <p><%= @quote.client.display_name %></p>
+    <h1><%= @quote.title %></h1>
   </div>
-  <% if @quote.editable? %>
-    <%= link_to "Edit details", edit_quote_path(@quote), class: "btn" %>
-  <% end %>
+  <div class="actions">
+    <%= status_badge(@quote) %>
+    <% if @quote.editable? %>
+      <%= link_to "Edit details", edit_quote_path(@quote), class: "btn" %>
+    <% end %>
+  </div>
 </div>
 
 <% if @quote.accepted? %>
-  <p class="accepted-note">
-    Accepted by <strong><%= @quote.accepted_by_name %></strong>
-    on <%= l(@quote.accepted_at.in_time_zone("America/Edmonton"), format: :long) %>
-    for <strong><%= money(@quote.accepted_total_cents) %></strong>. This version is locked.
-  </p>
+  <div class="accepted-note">
+    <p>Accepted by <strong><%= @quote.accepted_by_name %></strong> on <%= l(@quote.accepted_at.in_time_zone("America/Edmonton"), format: :long) %>.</p>
+    <p class="soft">Locked at <%= money(@quote.accepted_total_cents) %>.</p>
+  </div>
 <% end %>
 
-<section class="card">
-  <%= render "quotes/lines", quote: @quote, removable: @quote.editable? %>
+<section class="sheet">
+  <% if @quote.line_items.any? %>
+    <%= render "quotes/lines", quote: @quote, removable: @quote.editable? %>
+  <% else %>
+    <p class="soft">No lines yet. Add the first one below.</p>
+  <% end %>
 
   <% if @quote.editable? %>
     <%= form_with model: [@quote, @line_item], class: "add-line" do |f| %>
       <%= f.label :description, "Item", class: "sr-only" %>
-      <%= f.text_field :description, placeholder: "Logo concepts (3 directions)", required: true %>
-      <%= f.label :quantity, "Qty", class: "sr-only" %>
+      <%= f.text_field :description, placeholder: "Logo concepts, three directions", required: true %>
+      <%= f.label :quantity, "Quantity", class: "sr-only" %>
       <%= f.number_field :quantity, value: 1, step: "0.25", min: "0.25", required: true %>
       <%= f.label :unit_price, "Rate in dollars", class: "sr-only" %>
-      <%= f.text_field :unit_price, value: nil, placeholder: "Rate ($)", inputmode: "decimal", required: true %>
+      <%= f.text_field :unit_price, value: nil, placeholder: "Rate", inputmode: "decimal", required: true %>
       <%= f.submit "Add line", class: "btn" %>
     <% end %>
   <% end %>
 </section>
 
-<section class="card share">
-  <% case @quote.status %>
-  <% when "draft" %>
-    <h2>Ready to send?</h2>
-    <p>Once you mark it as sent, the client's private link starts working.</p>
+<section class="sheet share">
+  <% if @quote.status == "draft" %>
+    <h2>Send to <%= @quote.client.name %></h2>
+    <p>Marking it as sent turns on their private link.</p>
     <%= button_to "Mark as sent", send_to_client_quote_path(@quote), class: "btn primary",
           disabled: @quote.line_items.empty? %>
   <% else %>
     <h2>Client link</h2>
-    <p>Anyone with this link can see the quote, so share it only with <%= @quote.client.name %>.</p>
-    <input class="share-link" type="text" readonly value="<%= shared_quote_url(@quote.share_token) %>"
-           aria-label="Client link">
+    <p>Anyone with this link can see the quote. Share it only with <%= @quote.client.name %>.</p>
+    <input class="share-link" type="text" readonly value="<%= shared_quote_url(@quote.share_token) %>" aria-label="Client link">
   <% end %>
 </section>
 
 <% unless @quote.accepted? %>
-  <%= button_to "Delete quote", @quote, method: :delete, class: "link-button danger",
-        form: { data: { turbo_confirm: "Delete this quote?" } } %>
+  <div class="page-foot">
+    <%= button_to "Delete quote", @quote, method: :delete, class: "link-button danger",
+          form: { data: { turbo_confirm: "Delete this quote?" } } %>
+  </div>
 <% end %>

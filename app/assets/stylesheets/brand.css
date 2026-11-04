@@ -1,0 +1,18 @@
+/*
+  Brand settings. Everything that says "Topaz" visually lives here,
+  so a new logo or colour scheme is a change to this file only.
+
+  The brand isn't final yet, so these are neutral placeholders.
+*/
+:root {
+  --brand-accent: #17191c;     /* buttons, links, the line under the total */
+  --brand-accent-ink: #ffffff; /* text on top of the accent */
+  --brand-font: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --brand-accent: #eef0f3;
+    --brand-accent-ink: #17191c;
+  }
+}

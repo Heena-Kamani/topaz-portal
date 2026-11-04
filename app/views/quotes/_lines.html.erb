@@ -1,4 +1,5 @@
 <%# The quote as a table. Shared by the studio page and the client's page. %>
+<% removable = local_assigns[:removable] %>
 <table class="lines">
   <thead>
     <tr>
@@ -6,27 +7,28 @@
       <th scope="col" class="num">Qty</th>
       <th scope="col" class="num">Rate</th>
       <th scope="col" class="num">Amount</th>
-      <% if local_assigns[:removable] %><th scope="col"><span class="sr-only">Remove</span></th><% end %>
+      <% if removable %><th scope="col" class="remove"><span class="sr-only">Remove</span></th><% end %>
     </tr>
   </thead>
   <tbody>
-    <% quote.line_items.select(&:persisted?).each do |line| %>
+    <% quote.line_items.each do |line| %>
       <tr>
         <td><%= line.description %></td>
         <td class="num"><%= number_with_precision(line.quantity, precision: 2, strip_insignificant_zeros: true) %></td>
         <td class="num"><%= money(line.unit_price_cents) %></td>
         <td class="num"><%= money(line.total_cents) %></td>
-        <% if local_assigns[:removable] %>
-          <td class="num">
-            <%= button_to "Remove", quote_line_item_path(quote, line), method: :delete, class: "link-button" %>
+        <% if removable %>
+          <td class="num remove">
+            <%= button_to "Remove", quote_line_item_path(quote, line), method: :delete, class: "link-button",
+                  aria: { label: "Remove #{line.description}" } %>
           </td>
         <% end %>
       </tr>
     <% end %>
   </tbody>
   <tfoot>
-    <tr><th scope="row" colspan="3">Subtotal</th><td class="num"><%= money(quote.subtotal_cents) %></td></tr>
-    <tr><th scope="row" colspan="3"><%= tax_label(quote) %></th><td class="num"><%= money(quote.tax_cents) %></td></tr>
-    <tr class="grand"><th scope="row" colspan="3">Total (CAD)</th><td class="num"><%= money(quote.total_cents) %></td></tr>
+    <tr><th scope="row" colspan="3">Subtotal</th><td class="num"><%= money(quote.subtotal_cents) %></td><% if removable %><td></td><% end %></tr>
+    <tr><th scope="row" colspan="3"><%= tax_label(quote) %></th><td class="num"><%= money(quote.tax_cents) %></td><% if removable %><td></td><% end %></tr>
+    <tr class="grand"><th scope="row" colspan="3">Total, CAD</th><td class="num"><%= money(quote.total_cents) %></td><% if removable %><td></td><% end %></tr>
   </tfoot>
 </table>

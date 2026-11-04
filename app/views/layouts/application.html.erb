@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title><%= content_for(:title) || "Studio" %> · Topaz</title>
+    <title><%= content_for(:title) || "Studio" %> | Topaz Design Co.</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="robots" content="noindex">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <%= render "shared/fonts" %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body class="studio">
     <header class="bar">
-      <%= link_to root_path, class: "brand" do %>
-        <%= render "shared/mark" %> Topaz <span>studio</span>
-      <% end %>
-      <nav>
-        <%= link_to "Quotes", quotes_path %>
-        <%= link_to "Clients", clients_path %>
+      <%= link_to root_path, class: "wordmark" do %>Topaz<span>Studio</span><% end %>
+      <nav aria-label="Main">
+        <%= link_to "Quotes", quotes_path, aria: { current: (controller_name == "quotes" ? "page" : nil) } %>
+        <%= link_to "Clients", clients_path, aria: { current: (controller_name == "clients" ? "page" : nil) } %>
       </nav>
     </header>
 

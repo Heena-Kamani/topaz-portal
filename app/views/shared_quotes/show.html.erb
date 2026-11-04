@@ -1,25 +1,25 @@
 <section class="quote-head">
-  <p class="eyebrow">Quote for <%= @quote.client.display_name %></p>
+  <p class="soft">For <%= @quote.client.display_name %></p>
   <h1><%= @quote.title %></h1>
-  <p class="soft">Prepared <%= l(@quote.updated_at.in_time_zone("America/Edmonton").to_date, format: :long) %></p>
+  <p class="soft"><%= l(@quote.updated_at.in_time_zone("America/Edmonton").to_date, format: :long) %></p>
 </section>
 
-<%= render "quotes/lines", quote: @quote %>
+<div class="sheet">
+  <%= render "quotes/lines", quote: @quote %>
+</div>
 
 <% if @quote.accepted? %>
-  <div class="accepted-note">
-    <p><strong>Accepted.</strong> <%= @quote.accepted_by_name %> accepted this quote on
-      <%= l(@quote.accepted_at.in_time_zone("America/Edmonton"), format: :long) %>
-      for <%= money(@quote.accepted_total_cents) %>.</p>
+  <div class="accepted-note accept">
+    <p><strong><%= @quote.accepted_by_name %></strong> accepted this quote on <%= l(@quote.accepted_at.in_time_zone("America/Edmonton"), format: :long) %>.</p>
     <p class="soft">I'll be in touch about next steps soon.</p>
   </div>
 <% else %>
   <%= form_with url: accept_shared_quote_path(@quote.share_token), class: "accept" do |f| %>
-    <h2>Happy with this?</h2>
-    <p class="soft">Type your name to accept. This locks the quote at <%= money(@quote.total_cents) %>.</p>
+    <h2>Accept this quote</h2>
+    <p class="soft">Type your name to accept at <%= money(@quote.total_cents) %>. The quote is locked once you do.</p>
     <%= f.label :name, "Your name", class: "sr-only" %>
-    <%= f.text_field :name, placeholder: "Your full name", autocomplete: "name", required: true %>
+    <%= f.text_field :name, class: "sign", placeholder: "Your full name", autocomplete: "name", required: true %>
     <%= f.submit "Accept quote", class: "btn primary" %>
   <% end %>
-  <p class="soft small">Questions or changes? Just reply to the email this link came in.</p>
+  <p class="after">Questions or changes? Reply to the email this link came in.</p>
 <% end %>

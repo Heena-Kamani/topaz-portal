@@ -19,6 +19,7 @@ Not deployed yet. The studio side needs a sign-in first.
 
 - Money is stored in cents. Tax is in basis points (500 = 5% GST).
 - Accepting stores `accepted_total_cents` as the record of what was agreed.
+- The logo and colours aren't final, so the look is neutral for now. Every brand choice (accent colour, font) lives in `app/assets/stylesheets/brand.css`; when the brand is ready, update that, the wordmark in both layouts, and `public/icon.svg`.
 - No GraphQL for now. If I add it, it's an API alongside the app, not a replacement.
 
 ## Rules for this repo
