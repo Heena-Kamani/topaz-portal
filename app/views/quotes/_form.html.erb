@@ -1,0 +1,25 @@
+<%= render "shared/errors", record: quote %>
+
+<%= form_with model: quote, class: "form" do |f| %>
+  <div class="field">
+    <%= f.label :client_id, "Client" %>
+    <%= f.collection_select :client_id, Client.order(:name), :id, :display_name, { prompt: "Choose a client" }, required: true %>
+    <small>Not listed? <%= link_to "Add a client", new_client_path %></small>
+  </div>
+
+  <div class="field">
+    <%= f.label :title, "What's this quote for?" %>
+    <%= f.text_field :title, placeholder: "Brand identity refresh", required: true %>
+  </div>
+
+  <div class="field narrow">
+    <%= f.label :tax_rate_bps, "Tax rate (basis points)" %>
+    <%= f.number_field :tax_rate_bps, min: 0, max: 10_000 %>
+    <small>500 is 5% GST. Change it for clients outside Alberta.</small>
+  </div>
+
+  <div class="actions">
+    <%= f.submit quote.new_record? ? "Start quote" : "Save", class: "btn primary" %>
+    <%= link_to "Cancel", quote.new_record? ? quotes_path : quote, class: "btn" %>
+  </div>
+<% end %>

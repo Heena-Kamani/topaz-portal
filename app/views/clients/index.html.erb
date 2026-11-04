@@ -1,0 +1,20 @@
+<% content_for :title, "Clients" %>
+
+<div class="page-head">
+  <h1>Clients</h1>
+  <%= link_to "Add client", new_client_path, class: "btn primary" %>
+</div>
+
+<% if @clients.empty? %>
+  <div class="empty"><p>No clients yet.</p></div>
+<% else %>
+  <ul class="client-list">
+    <% @clients.each do |client| %>
+      <li>
+        <span class="who"><%= client.display_name %></span>
+        <span class="soft"><%= client.email %></span>
+        <%= link_to "New quote", new_quote_path(client_id: client.id) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

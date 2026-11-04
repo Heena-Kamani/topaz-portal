@@ -1,0 +1,26 @@
+<% content_for :title, "Quotes" %>
+
+<div class="page-head">
+  <h1>Quotes</h1>
+  <%= link_to "New quote", new_quote_path, class: "btn primary" %>
+</div>
+
+<% if @quotes.empty? %>
+  <div class="empty">
+    <p>No quotes yet.</p>
+    <p><%= link_to "Add your first client", new_client_path %> and start one.</p>
+  </div>
+<% else %>
+  <ul class="quote-list">
+    <% @quotes.each do |quote| %>
+      <li>
+        <%= link_to quote, class: "quote-row" do %>
+          <span class="who"><%= quote.client.display_name %></span>
+          <span class="what"><%= quote.title %></span>
+          <span class="amount"><%= money(quote.total_cents) %></span>
+          <%= status_badge(quote) %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

@@ -1,0 +1,7 @@
+<% if record.errors.any? %>
+  <div class="flash flash-alert" role="alert">
+    <% record.errors.full_messages.each do |message| %>
+      <p><%= message %></p>
+    <% end %>
+  </div>
+<% end %>

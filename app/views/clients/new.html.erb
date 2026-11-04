@@ -1,0 +1,23 @@
+<% content_for :title, "New client" %>
+<h1>New client</h1>
+
+<%= render "shared/errors", record: @client %>
+
+<%= form_with model: @client, class: "form" do |f| %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name, autocomplete: "off", required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.email_field :email, autocomplete: "off", required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :company %> <small>(optional)</small>
+    <%= f.text_field :company, autocomplete: "off" %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Add client", class: "btn primary" %>
+    <%= link_to "Cancel", clients_path, class: "btn" %>
+  </div>
+<% end %>

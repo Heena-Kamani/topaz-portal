@@ -1,0 +1,7 @@
+en:
+  date:
+    formats:
+      long: "%B %-d, %Y"
+  time:
+    formats:
+      long: "%B %-d, %Y at %-l:%M %P"

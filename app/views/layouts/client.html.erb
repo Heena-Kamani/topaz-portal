@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= @quote.title %> · Topaz Design Co.</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="noindex">
+    <meta name="referrer" content="no-referrer">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="client">
+    <main class="paper">
+      <header class="letterhead">
+        <%= render "shared/mark" %>
+        <div>
+          <strong>Topaz Design Co.</strong>
+          <span>Design and consulting, Edmonton</span>
+        </div>
+      </header>
+
+      <%= render "shared/flash" %>
+      <%= yield %>
+    </main>
+  </body>
+</html>
