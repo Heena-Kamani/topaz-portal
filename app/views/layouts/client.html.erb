@@ -4,7 +4,8 @@
     <title><%= @quote.title %> | Topaz Design Co.</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="robots" content="noindex">
-    <meta name="referrer" content="no-referrer">
+    <%# same-origin keeps the private link out of other sites, while letting the accept form prove it came from here %>
+    <meta name="referrer" content="same-origin">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="icon" href="/icon.svg" type="image/svg+xml">

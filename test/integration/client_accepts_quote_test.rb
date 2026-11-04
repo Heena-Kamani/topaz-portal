@@ -42,6 +42,15 @@ class ClientAcceptsQuoteTest < ActionDispatch::IntegrationTest
     assert_not @quote.reload.accepted?
   end
 
+  # With no-referrer, browsers send a "null" origin on the accept form and
+  # Rails rejects it, so clients couldn't accept at all. Keep it same-origin.
+  test "the client page keeps a referrer policy the accept form can work with" do
+    @quote.send_to_client!
+    get shared_quote_path(@quote.share_token)
+    assert_select "meta[name=referrer][content=same-origin]"
+    assert_select "meta[name=referrer][content=no-referrer]", count: 0
+  end
+
   test "accepting twice doesn't change the record" do
     @quote.send_to_client!
     post accept_shared_quote_path(@quote.share_token), params: { name: "Maya Example" }
